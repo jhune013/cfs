@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var clickedButton   =   '';
-    var base_url = window.location.origin;
+    var base_url = window.location.origin + "/cfs";
 
     function empty(value) {
         return ( $.trim( value ) == '' );
@@ -207,7 +207,20 @@ $(document).ready(function(){
     
 
     if ($('.summernote').length >= 1) {
-        $('.summernote').summernote();
+        $('.summernote').summernote({
+         height: 300,
+         toolbar: [
+    // [groupName, [list of button]]
+    ['style', ['bold', 'italic', 'underline', 'clear']],
+    ['font', ['strikethrough', 'superscript', 'subscript']],
+    ['fontsize', ['fontsize']],
+    ['color', ['color']],
+    ['para', ['ul', 'ol', 'paragraph']],
+    ['height', ['height']],
+    ['table']
+  ]
+     });
+
     }
 
     if ($('#issue_list_tbl').length == 1) {
@@ -219,7 +232,7 @@ $(document).ready(function(){
             bFilter     :   false,
             paging      :   true,
             language    : {
-                zeroRecords     : "None",
+                zeroRecords     : "No record",
                 processing      : "Fetching data..."
             },
             processing  :   true,

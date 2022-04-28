@@ -7,7 +7,7 @@
         <h5><p>Hello, </p></h5>
         <p>Access Level: </p>
         <li class="active">
-             <a href="it-helpdesk">IT Helpdesk</a>
+             <a href="<?php echo base_url('helpdesk'); ?>">IT Helpdesk</a>
            
         </li>
         <li>

@@ -49,6 +49,7 @@ class Helpdesk extends MY_Controller {
 
     public function create_your_ticket()
     {
+        #if support type 
         if ($this->input->is_ajax_request()) {
             $validation  =   validation([
                 ['typeofsupport', '<strong>Type of Support</strong>', 'required|trim', '#typeofsupport'],
