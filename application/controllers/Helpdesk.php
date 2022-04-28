@@ -38,9 +38,10 @@ class Helpdesk extends MY_Controller {
             'title'         =>  'IT Helpdesk - Request a ticket',
             'support_types' =>  $support_types,
             'remarks'       =>  $remarks,
-            'status'        =>   $status,   
-            'priority'      => $priority,
-            'validity'      => $validity 
+            'status'        =>  $status,   
+            'priority'      =>  $priority,
+            'validity'      =>  $validity,
+            'viewing'       =>  false
         ];
     
         $this->load->view('template', $data);
@@ -172,7 +173,7 @@ class Helpdesk extends MY_Controller {
             if ($results) {
                 foreach ($results as $x) {
                     array_push($object['data'], [
-                        '<a class="link" id="btn_ticket_id" data-id="' . $x->create_id . '">' . $x->ticket_role . '-' . $x->ticket_id . '</a>',
+                        '<a class="link" href="' . base_url('helpdesk/view_ticket/' . $x->create_id) . '" data-id="' . $x->create_id . '">' . $x->ticket_role . '-' . $x->ticket_id . '</a>',
                         $x->issue_name_type,
                         $x->employee_name,
                         $x->status_name,
@@ -190,6 +191,46 @@ class Helpdesk extends MY_Controller {
         $data   =   [
             'content'   => 'content/helpdesk/issues-list',
             'title'     =>  'IT Helpdesk - Issues List'  
+        ];
+    
+        $this->load->view('template', $data);
+    }
+
+    public function view_ticket($create_id)
+    {
+        $this->load->model('Type_of_support_model');
+        $this->load->model('Remarks_model');
+        $this->load->model('Status_model');
+        $this->load->model('Priority_model');
+        $this->load->model('Validity_model');
+        $this->load->model('Ticket_creation_model');
+        $this->load->model('Issue_type_model');
+
+        $support_types   =   $this->Type_of_support_model->list_all_reader(null, null, null, 'type_id ASC');
+        $remarks         =   $this->Remarks_model->list_all_reader(null, null, null, 'remark_id ASC');
+        $status          =   $this->Status_model->list_all_reader(null, null, null, 'status_id ASC');
+        $priority        =   $this->Priority_model->list_all_reader(null, null, null, 'id ASC');
+        $validity        =   $this->Validity_model->list_all_reader(null, null, null, 'Validity_id ASC');
+
+        $row            =   $this->Ticket_creation_model->get_reader(['create_id' => $create_id]);
+
+        $issue_types    =   false;
+
+        if ($row) {
+            $issue_types    =   $this->Issue_type_model->list_all_reader(['type_id' => $row->type_id]);
+        }
+
+        $data   =   [
+            'content'       =>  'content/helpdesk/request-a-ticket',
+            'title'         =>  'IT Helpdesk - Request a ticket',
+            'support_types' =>  $support_types,
+            'remarks'       =>  $remarks,
+            'status'        =>  $status,   
+            'priority'      =>  $priority,
+            'validity'      =>  $validity,
+            'issue_types'   =>  $issue_types,
+            'row'           =>  $row,
+            'viewing'       =>  true
         ];
     
         $this->load->view('template', $data);
