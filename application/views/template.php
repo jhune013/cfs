@@ -23,8 +23,9 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="<?php echo base_url('public/site/js/popper.min.js'); ?>" crossorigin="anonymous"></script>
         <script src="<?php echo base_url('public/site/js/bootstrap.min.js'); ?>" crossorigin="anonymous"></script>
-        <script src="<?php echo base_url('public/site/js/dirty.js'); ?>"></script>
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
+        <script src="<?php echo base_url('public/site/js/dirty.js'); ?>"></script>
 
     </body>
 </html>

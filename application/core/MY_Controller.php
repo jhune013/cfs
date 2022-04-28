@@ -2,6 +2,8 @@
 
 class MY_Controller extends CI_Controller {
 
+    public $user    =   '';
+
     public function __construct()
     {
         parent::__construct();
@@ -9,6 +11,8 @@ class MY_Controller extends CI_Controller {
         $this->_ci =& get_instance();
         $this->load->helper('email');
         $this->load->helper('file');
+
+        $this->user     =   (isset($this->session->user_session) ? $this->session->user_session : null);
     }
 
 

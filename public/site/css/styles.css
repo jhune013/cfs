@@ -147,8 +147,23 @@ a{
 }
 
 
-  .required {
-    color: red;
-  }
+.required {
+  color: red;
+}
 
  
+.link {
+    cursor: pointer;
+}
+
+.link:hover {
+    text-decoration: underline !important;
+}
+
+.btn {
+    text-transform: uppercase;
+}
+
+.datatable_fixed_height {
+    min-height: 550px;
+}
