@@ -9,7 +9,6 @@ class Type_of_Support extends CI_Controller{
     }
     public function index()
     {
-          $this->load->view('content/request-a-ticket', $data);
-
+        $this->load->view('content/request-a-ticket', $data);
     }
 }
