@@ -55,12 +55,23 @@
                                         <label class="control-label" style="padding-right: 0px;">Other Remark</label>
                                         <select class="form-control" id="remark" name="remark">
                                             <option value="" selected disabled hidden>Select...</option>
+                                            <?php if ($remarks): ?>
+                                                <?php foreach ($remarks as $row): ?>
+                                                    <option value="<?php echo $row->remark_id; ?>"><?php echo $row->remark_name; ?></option>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </select>
                                     </div>
                                     <div class="col form-group">
                                         <label class="control-label" style="padding-right: 0px;">Status</label>
                                         <select class="form-control" id="status" name="status"  >
                                             <option value="" selected disabled hidden>Select...</option>
+                                            <?php if($status):?>
+                                                <?php foreach($status as $row): ?>
+                                                    <option value="<?php echo $row->status_id; ?>"><?php echo $row->status_name; 
+                                                    ?></option>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </select>
                                     </div>
                                 </div>
@@ -69,12 +80,24 @@
                                         <label class="control-label" style="padding-right: 0px;">Validity</label>
                                         <select class="form-control" id="validity" name="validity">
                                             <option value="" selected disabled hidden>Select...</option>
+                                            <?php if($validity):?>
+                                                <?php foreach($validity as $row): ?>
+                                                    <option value="<?php echo $row->validity_id; ?>"><?php echo $row->validity_name; 
+                                                    ?></option>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </select>
                                     </div>
                                     <div class="col form-group">
                                         <label class="control-label" style="padding-right: 0px;">Priority</label>
                                         <select class="form-control" id="priority" name="priority"  >
                                             <option value="" selected disabled hidden>Select...</option>
+                                            <?php if($priority):?>
+                                                <?php foreach($priority as $row): ?>
+                                                    <option value="<?php echo $row->id; ?>"><?php echo $row->priority_name; 
+                                                    ?></option>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </select>
                                     </div>
                                 </div>
