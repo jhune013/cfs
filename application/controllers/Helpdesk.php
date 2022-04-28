@@ -43,4 +43,30 @@ class Helpdesk extends MY_Controller {
     
         $this->load->view('template', $data);
     }
+
+    public function request_issue_types()
+    {
+        if ($this->input->is_ajax_request()) {
+            $value  =   $this->input->post('value', true);
+
+            $this->load->model('Issue_type_model');
+
+            $where          =   [
+                'type_id'   =>  $value
+            ];
+
+            $issue_types    =   $this->Issue_type_model->list_all_reader($where);
+
+            $issue_type_html    =   '<option value="" selected disabled hidden>Select...</option>';
+            if ($issue_types) {
+                foreach ($issue_types as $x) {
+                    $issue_type_html    .=  '<option value="' . $x->issue_type_id . '">' . $x->issue_name_type . '</option>';
+                }
+            }
+
+            echo json_encode([
+                'issue_type_html'   =>  $issue_type_html
+            ]);
+        }
+    }
 }

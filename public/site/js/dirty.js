@@ -1,5 +1,6 @@
 $(document).ready(function(){
     var clickedButton   =   '';
+    var base_url = window.location.origin;
 
     function empty(value) {
         return ( $.trim( value ) == '' );
@@ -130,5 +131,33 @@ $(document).ready(function(){
                 "iDisplayLength": 25
         });
     }
+
+
+    $(document).on('change', 'select[name="typeofsupport"]', function(){
+        var value   =   $(this).val();
+        var _this   =   $(this);
+
+        _this.attr('disabled', true);
+
+        $.ajax({
+            type: 'post',
+            url: base_url + '/helpdesk/request_issue_types',
+            dataType: 'json',
+            data: {
+                value   :   value
+            },
+            success: function (result) {
+                if (!empty(result)) {
+                    $('select[name="issue_name_type"]').html(result.issue_type_html);
+                }
+
+
+                _this.attr('disabled', false);
+            },
+            error: function () {
+            }
+        });
+    });
+    
 
 });

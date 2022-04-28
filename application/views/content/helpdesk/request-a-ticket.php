@@ -1,19 +1,13 @@
-<div class="container">
+<div class="container p-4">
  
     <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <br>
-                <button type="submit" form="new-ticket-form" class="btn btn-primary btn-sm">Save</button>
-            </div>
-        </div>
 
         <ul class="nav nav-tabs responsive-tabs" id="myTab" role="tablist">
             <li class="nav-item active">
                 <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Create your Ticket</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"Service Level Agreement</a>
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Service Level Agreement</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false>">Reference</a>
@@ -25,7 +19,7 @@
                     <div class="row">
                         <div class="col-8">
                             <br>
-                            <form name="myForm" id="new-ticket-form" class="" onsubmit="return validateForm()" action="/" method="post">
+                            <form name="myForm" id="new-ticket-form" class="" action="/" method="post">
                                 <div class="form-row">
                                     <div class="col form-group">
                                     </div>
@@ -37,7 +31,7 @@
                                             <option value="" selected disabled hidden>Select...</option>
                                             <?php if ($support_types): ?>
                                                 <?php foreach ($support_types as $row): ?>
-                                                    <option value="<?php echo $row->support_type; ?>"><?php echo $row->support_type; ?></option>
+                                                    <option value="<?php echo $row->type_id; ?>"><?php echo $row->support_type; ?></option>
                                                 <?php endforeach; ?>
                                             <?php endif; ?>
                                         </select>
@@ -59,14 +53,14 @@
                                 <div class="form-row">
                                     <div class="col form-group">
                                         <label class="control-label" style="padding-right: 0px;">Other Remark</label>
-
                                         <select class="form-control" id="remark" name="remark">
+                                            <option value="" selected disabled hidden>Select...</option>
                                         </select>
                                     </div>
                                     <div class="col form-group">
                                         <label class="control-label" style="padding-right: 0px;">Status</label>
                                         <select class="form-control" id="status" name="status"  >
-                                            <option  value="" disabled selected>-- Please choose an option --</option>
+                                            <option value="" selected disabled hidden>Select...</option>
                                         </select>
                                     </div>
                                 </div>
@@ -74,11 +68,13 @@
                                     <div class="col form-group">
                                         <label class="control-label" style="padding-right: 0px;">Validity</label>
                                         <select class="form-control" id="validity" name="validity">
+                                            <option value="" selected disabled hidden>Select...</option>
                                         </select>
                                     </div>
                                     <div class="col form-group">
                                         <label class="control-label" style="padding-right: 0px;">Priority</label>
                                         <select class="form-control" id="priority" name="priority"  >
+                                            <option value="" selected disabled hidden>Select...</option>
                                         </select>
                                     </div>
                                 </div>

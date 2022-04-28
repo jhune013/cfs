@@ -44,8 +44,8 @@ class Login extends MY_Controller {
                         'user_session'  =>  $result
                     ];
                     $this->session->set_userdata($session);
-                        #if validation is true proceed to it-helpdesk page
-                    $this->response(true, 'Login Successfully', ['action' => 'redirect', 'url' => base_url('it-helpdesk'), 'slow' => true]);
+                    #if validation is true proceed to it-helpdesk page
+                    $this->response(true, 'Login Successfully', ['action' => 'redirect', 'url' => base_url('helpdesk'), 'slow' => true]);
                 }
             }
 
@@ -58,7 +58,4 @@ class Login extends MY_Controller {
     
         $this->load->view('template_login', $data);
     }
-
-
-
 }
