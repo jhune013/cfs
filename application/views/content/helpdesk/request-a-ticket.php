@@ -33,7 +33,7 @@
                 <div class="container pt-4">
                   
             
-                    <form class="form" action="<?php echo base_url('helpdesk/create_your_ticket'); ?>" method="post">
+                    <form class="form" action="<?php echo base_url('helpdesk/update_ticket'); ?>" method="post">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-12">
 

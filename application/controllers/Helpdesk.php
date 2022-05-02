@@ -183,7 +183,9 @@ class Helpdesk extends MY_Controller {
                         $x->status_name,
                         $x->priority_name,
                         ''
+
                     ]);
+
                 }
             }
            
@@ -227,7 +229,7 @@ class Helpdesk extends MY_Controller {
 
         $data   =   [
             'content'       =>  'content/helpdesk/request-a-ticket',
-            'title'         =>  'IT Helpdesk - Request a ticket',
+            'title'         =>  'IT Helpdesk - Edit a ticket',
             'support_types' =>  $support_types,
             'remarks'       =>  $remarks,
             'status'        =>  $status,   
@@ -273,7 +275,7 @@ class Helpdesk extends MY_Controller {
 
 
 
-        public function update_ticket($create_id)
+        public function update_ticket()
         {
             
             $create_id          =   $this->input->post('create_id');
@@ -300,8 +302,10 @@ class Helpdesk extends MY_Controller {
                 'details'           =>  $details
                 
             ];
-            $update_row     =   $this->Ticket_creation_model->update($update);
-    
+            $update_row     =   $this->Ticket_creation_model->update('ticket_creation',$update, array('create_id' =>$create_id));
+
+            echo json_decode($update_row);
+           
         }
 
 }
