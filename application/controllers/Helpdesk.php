@@ -8,25 +8,31 @@ class Helpdesk extends MY_Controller {
         parent::__construct();
 
         $this->requiredLoggedIn();
+        $this->load->model('Ticket_creation_model');
     }
 
 	public function index()
 	{
+        //$this->load->model('Ticket_creation_model');  
+
+        //$all_tickets   =   $this->Ticket_creation_model->list_all_reader(null, null, null, 'create_id ASC');
+
         $data   =   [
             'content'   => 'content/helpdesk/home',
-            'title'     =>  'IT Helpdesk'  
+            'title'     =>  'IT Helpdesk' 
+            //'create_id' =>  $all_tickets 
         ];
     
         $this->load->view('template', $data);
 	}
-
+    #this function is to load the request a ticket page
     public function request_a_ticket()
     {
-        $this->load->model('Type_of_support_model');        //load Type_of_support_model 
-        $this->load->model('Remarks_model');                 //load Remarks_model 
-        $this->load->model('Status_model');                  //load Status_model 
-        $this->load->model('Priority_model');                  //load Priority_model 
-        $this->load->model('Validity_model');                   //load Validity_model 
+        $this->load->model('Type_of_support_model');        #load Type_of_support_model 
+        $this->load->model('Remarks_model');                #load Remarks_model 
+        $this->load->model('Status_model');                 #load Status_model 
+        $this->load->model('Priority_model');               #load Priority_model 
+        $this->load->model('Validity_model');               #load Validity_model 
 
         $support_types   =   $this->Type_of_support_model->list_all_reader(null, null, null, 'type_id ASC');
         $remarks         =   $this->Remarks_model->list_all_reader(null, null, null, 'remark_id ASC');
@@ -43,13 +49,13 @@ class Helpdesk extends MY_Controller {
             'validity'      =>  $validity,
             'viewing'       =>  false
         ];
-         //load the template
+         #load the template
         $this->load->view('template', $data);
     }
-    //this function is to create a ticket save data to our database
+    #this function is to save our ticket to database
     public function create_your_ticket()
     {
-        #if support type 
+        #validation before we save the ticket, check if type of support, type of issue , and details
         if ($this->input->is_ajax_request()) {
             $validation  =   validation([
                 ['typeofsupport', '<strong>Type of Support</strong>', 'required|trim', '#typeofsupport'],
@@ -125,7 +131,7 @@ class Helpdesk extends MY_Controller {
             }
         }
     }
-        //load the ticket list in  table list
+        #load the ticket list in  table list
     public function issues_list()
     {
         if ($this->input->is_ajax_request()) {
@@ -202,16 +208,16 @@ class Helpdesk extends MY_Controller {
         $this->load->view('template', $data);
     }
 
-    //function to view the ticket 
+    #function to view the ticket 
     public function view_ticket($create_id)
     {
-        $this->load->model('Type_of_support_model');
-        $this->load->model('Remarks_model');
-        $this->load->model('Status_model');
-        $this->load->model('Priority_model');
-        $this->load->model('Validity_model');
-        $this->load->model('Ticket_creation_model');
-        $this->load->model('Issue_type_model');
+        $this->load->model('Type_of_support_model');        #load Type_of_support_model 
+        $this->load->model('Remarks_model');                #load Remarks_model
+        $this->load->model('Status_model');                 #load Status_model 
+        $this->load->model('Priority_model');                #load Priority_model 
+        $this->load->model('Validity_model');                #load Validity_model 
+        $this->load->model('Ticket_creation_model');         #load Ticket_creation_model 
+        $this->load->model('Issue_type_model');               #load Issue_type_model       
 
         $support_types   =   $this->Type_of_support_model->list_all_reader(null, null, null, 'type_id ASC');
         $remarks         =   $this->Remarks_model->list_all_reader(null, null, null, 'remark_id ASC');
@@ -246,7 +252,7 @@ class Helpdesk extends MY_Controller {
 
 
 
-    //load the dynamic dropdown
+    #load the dynamic dropdown
     public function request_issue_types()
     {
         if ($this->input->is_ajax_request()) {
@@ -275,24 +281,25 @@ class Helpdesk extends MY_Controller {
 
 
 
-        public function update_ticket()
+        public function update($create_id)
         {
-            
-            $create_id          =   $this->input->post('create_id');
-            $typeofsupport      =   $this->input->post('typeofsupport');
-            $issue_name_type    =   $this->input->post('issue_name_type');
-            $remark             =   $this->input->post('remark');
-            $status             =   $this->input->post('status');
-            $validity           =   $this->input->post('validity');
-            $priority           =   $this->input->post('priority');
-            $details            =   $this->input->post('details');
+       
+        //  $row            =   $this->Ticket_creation_model->get_reader(['create_id' => $create_id]);
+             $typeofsupport      =   $this->input->post('typeofsupport', true);
+            $typeofsupport      =   $this->input->post('typeofsupport', true);
+            $issue_name_type    =   $this->input->post('issue_name_type', true);
+            $remark             =   $this->input->post('remark', true);
+            $status             =   $this->input->post('status', true);
+            $validity           =   $this->input->post('validity', true);
+            $priority           =   $this->input->post('priority', true);
+            $details            =   $this->input->post('details', true);
 
              $this->load->model('Ticket_creation_model');
               
-         $update_row     =   [
+         $update    =   [
                
-                'content'           =>  'content/helpdesk/request-a-ticket',
-                'title'             =>  'IT Helpdesk - Request a ticket',
+                // 'ticket_role'       =>  $ticket_role,
+                // 'ticket_id'         =>  $ticket_id,
                 'type_id'           =>  $typeofsupport,
                 'issue_id'          =>  $issue_name_type,
                 'remark_id'         =>  $remark,
@@ -302,11 +309,28 @@ class Helpdesk extends MY_Controller {
                 'details'           =>  $details
                 
             ];
-            
-            $update_row     =   $this->Ticket_creation_model->update($update, ['create_id' => $create_id]);
 
-            echo json_decode($update_row);
+            // print_r($update);
+            
+
+           $update_row     =   $this->Ticket_creation_model->update($update, ['create_id' => $create_id]);
+
+           if ($update_row) {
+
+                $this->response(true, 'Updated Successfully', ['action' => 'redirect', 'url' => base_url('helpdesk/issues_list'), 'slow' => true]);
+            } else {
+                $this->response(false, 'Please try again.');
+
+            }
            
         }
+
+
+
+        // public function update($create_id)
+        // {
+
+        //     echo $create_id;
+        // }
 
 }
