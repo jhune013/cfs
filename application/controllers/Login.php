@@ -17,7 +17,7 @@ class Login extends MY_Controller {
                 ['txt_username', '<strong>Username</strong>', 'required|trim', '#txt_username'],
                 ['txt_password', '<strong>Password</strong>', 'required|trim', '#txt_password']
             ]);
-
+         // Check for user login process
             if ($validation) {
                 $this->response(false, $validation);
             }
@@ -34,18 +34,22 @@ class Login extends MY_Controller {
 
             $result =   $this->Users_master_model->get($where);
 
-            #Validation for  password if true
+            #password verification  if true 
             if ($result) {
                 $check_password     =   password_verify($txt_password, $result->password);
 
                 if ($check_password) {
                     $session    =   [
                         'user_id'       =>  $result->user_id,
-                        'user_session'  =>  $result
+                        'user_session'  =>  $result,
+                        'firstname'     => $result->firstname,
+                        'user_role'     => $result->user_role
                     ];
                     $this->session->set_userdata($session);
+
                     #if validation is true proceed to it-helpdesk page
                     $this->response(true, 'Login Successfully', ['action' => 'redirect', 'url' => base_url('helpdesk'), 'slow' => true]);
+
                 }
             }
 

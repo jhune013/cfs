@@ -26,6 +26,6 @@
         <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js"></script>
         <script src="<?php echo base_url('public/site/js/dirty.js'); ?>"></script>
-
+        
     </body>
 </html>

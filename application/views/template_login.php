@@ -17,7 +17,7 @@
 
         <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
             <div class="container">
-                <a class="navbar-brand" href="/main_dashboard">Consistent Frozen </a>
+                <a class="navbar-brand" href="<?php echo base_url('helpdesk'); ?>">Consistent Frozen </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-list-5" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -35,5 +35,6 @@
         <script src="<?php echo base_url('public/site/js/popper.min.js'); ?>" crossorigin="anonymous"></script>
         <script src="<?php echo base_url('public/site/js/bootstrap.min.js'); ?>" crossorigin="anonymous"></script>
         <script src="<?php echo base_url('public/site/js/dirty.js'); ?>"></script>
+        
     </body>
 </html>

@@ -11,8 +11,10 @@ class Logout extends MY_Controller {
     public function index()
     {
         if (!empty($this->session->user_session)) {
+
             $this->session->sess_destroy();
             redirect('/login');
+            
         } else {
             redirect('/login');
         }

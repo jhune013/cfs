@@ -1,8 +1,9 @@
 <?php
     $tab_1  =   ($viewing ? 'View your Ticket' : 'Create your Ticket');
     $action =   ($viewing ? base_url('helpdesk/update_your_ticket') : base_url('helpdesk/create_your_ticket'));
-
-    $txt_details    =   '';
+    $btn_edt    =   ($viewing ? 'Update' : 'SUBMIT');
+     $action =   ($viewing ? base_url('helpdesk/update_your_ticket') : base_url('helpdesk/create_your_ticket'));   
+     $txt_details    =   '';
 
     if (isset($row)) {
         if ($row) {
@@ -30,6 +31,8 @@
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                 <div class="container pt-4">
+                  
+            
                     <form class="form" action="<?php echo base_url('helpdesk/create_your_ticket'); ?>" method="post">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-12">
@@ -97,7 +100,7 @@
                             <div class="col-md-6">
                                 <div class="form-group form-parent">
                                     <label class="control-label" style="padding-right: 0px;">Other Remark</label>
-                                    <select class="form-control" id="remark" name="remark">
+                                    <select class="form-control" id="remark" name="remark"  >
                                         <option value="" selected disabled hidden>Select...</option>
                                         <?php if ($remarks): ?>
                                             <?php foreach ($remarks as $x): ?>
@@ -121,7 +124,7 @@
                             <div class="col-md-6">
                                 <div class="form-group form-parent">
                                     <label class="control-label" style="padding-right: 0px;">Status</label>
-                                    <select class="form-control" id="status" name="status" required>
+                                    <select class="form-control" id="status" name="status"  required>
                                         <option value="" selected disabled hidden>Select...</option>
                                         <?php if($status):?>
                                             <?php foreach($status as $x): ?>
@@ -206,8 +209,10 @@
                                     <textarea class="summernote" name="details" id="details"><?php echo $txt_details; ?></textarea> 
                                 </div>
                             </div>
+
                             <div class="col-md-3 offset-md-9 pt-4">
-                                <button type="submit" class="btn btn-primary w-100">SUBMIT</button>
+                                <button type="submit" class="btn btn-primary w-100"><?php echo $btn_edt; ?></button> 
+
                             </div>
                         </div>
                     </form>

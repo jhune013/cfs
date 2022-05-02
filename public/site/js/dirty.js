@@ -52,6 +52,7 @@ $(document).ready(function(){
         }
     }
 
+
     $(document).on('click', 'button[type=submit], input[type=submit]', function(){
         clickedButton   =   $(this);
     });
@@ -163,20 +164,20 @@ $(document).ready(function(){
         var input = $("#txt_password");
         
         if (input.attr("type") === "txt_password") {
-            input.attr("type", "text");
+            input.attr("type", "password");
         } else {
             input.attr("type", "txt_password");
         }
     });
 
 
-    if ($('#table-id').length == 1) {
-        $('#table-id').DataTable({
-            "order": [[ 1, "asc" ]],
-            "aLengthMenu": [[25, 50, 75, -1], [25, 50, 75, "All"]],
-                "iDisplayLength": 25
-        });
-    }
+    // if ($('#table-id').length == 1) {
+    //     $('#table-id').DataTable({
+    //         "order": [[ 1, "asc" ]],
+    //         "aLengthMenu": [[25, 50, 75, -1], [25, 50, 75, "All"]],
+    //             "iDisplayLength": 25
+    //     });
+    // }
 
 
     $(document).on('change', 'select[name="typeofsupport"]', function(){
@@ -244,5 +245,8 @@ $(document).ready(function(){
             }
         });
     }
+
+
+    
 
 });
