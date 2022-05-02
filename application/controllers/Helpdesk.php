@@ -289,7 +289,7 @@ class Helpdesk extends MY_Controller {
 
              $this->load->model('Ticket_creation_model');
               
-         $update     =   [
+         $update_row     =   [
                
                 'content'           =>  'content/helpdesk/request-a-ticket',
                 'title'             =>  'IT Helpdesk - Request a ticket',
@@ -302,7 +302,8 @@ class Helpdesk extends MY_Controller {
                 'details'           =>  $details
                 
             ];
-            $update_row     =   $this->Ticket_creation_model->update('ticket_creation',$update, array('create_id' =>$create_id));
+            
+            $update_row     =   $this->Ticket_creation_model->update($update, ['create_id' => $create_id]);
 
             echo json_decode($update_row);
            
