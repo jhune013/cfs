@@ -136,6 +136,7 @@ ul ul a {
   z-index: 1;
   box-shadow: 1px 1px 10px rgba(0,0,0,.3);
   cursor: pointer;
+ 
 }
 
 .ml-2{
@@ -167,3 +168,4 @@ a{
 .datatable_fixed_height {
     min-height: 550px;
 }
+

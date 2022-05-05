@@ -1,8 +1,8 @@
 <?php
     $tab_1  =   ($viewing ? 'View your Ticket' : 'Create your Ticket');
-    $action =   ($viewing ? base_url('helpdesk/update_your_ticket') : base_url('helpdesk/create_your_ticket'));
+    $action =   ($viewing ? base_url('helpdesk/update/'.$row->create_id): base_url('helpdesk/create_your_ticket'));
     $btn_edt    =   ($viewing ? 'Update' : 'SUBMIT');
-     $action =   ($viewing ? base_url('helpdesk/update_your_ticket') : base_url('helpdesk/create_your_ticket'));   
+     // $action1 =   ($viewing ? base_url('helpdesk/update') : base_url('helpdesk/update'));   
      $txt_details    =   '';
 
     if (isset($row)) {
@@ -12,12 +12,12 @@
     }
 
 ?>
-<!-- 
-<?php
 
-// print_r($row);
+<!-- <?php
 
-?> -->
+//print_r($row);
+
+?>  -->
 
 
 <div class="container p-4">
@@ -39,8 +39,8 @@
             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                 <div class="container pt-4">
                   
-                    <form class="form" action="<?php echo base_url(); ?>helpdesk/update/<?php echo $row->create_id; ?>"method="post">
-                   <!--  <form class="form" action="< ?php echo base_url('helpdesk/update'); ?>"method="post"> -->
+`                    <!-- <form class="form" id="editForm" action="< ?php echo base_url(); ?>helpdesk/update/< ?php echo $row->create_id; ?>" method="post"> -->
+                    <form class="form" id="editForm" action="<?php echo $action; ?>" method="post">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-12">
 
@@ -218,9 +218,11 @@
                             </div>
 
                             <div class="col-md-3 offset-md-9 pt-4">
-                                <button type="submit" class="btn btn-primary w-100"><?php echo $btn_edt; ?></button>  
-                                <button type="update" class="btn btn-primary w-100">edit</button> 
-
+                                <button type="submit" class="btn btn-primary w-100"><?php echo $btn_edt; ?></button> 
+                                 </div>
+                              <div class="col-md-3 offset-md-9 pt-4">
+                               <!--  <button type="submit" class="btn btn-primary w-100">edit</button> 
+ -->
                             </div>
                         </div>
                     </form>

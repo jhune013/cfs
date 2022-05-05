@@ -52,8 +52,37 @@ $(document).ready(function(){
         }
     }
 
+// $('#editForm').on('submit',function(){
+//         var create_id = $('#create_id').val();
+//         var typeofsupport = $('#typeofsupport').val();
+//         var issue_id = $('#issue_id').val();
+//         var remark_id = $('#remark_id').val();
+//         var status_id = $('#status_id').val();
+//         var validity_id = $('#validity_id').val();
+//         var priority_id = $('#priority_id').val();
+//          var details = $('#details').val();                  
+//         $.ajax({
+//             type : "POST",
+//             url  : "helpdesk/update",
+//             dataType : "JSON",
+//             data : {create_id:create_id, typeofsupport:typeofsupport, issue_id:issue_id, remark_id:remark_id, status_id:status_id, validity_id:validity_id, priority_id:priority_id, details:details},
+//             success: function(data){
+//                 $("#create_id").val("");
+//                 $("#typeofsupport").val("");
+//                 $('#issue_id').val("");
+//                 $("#remark_id").val("");
+//                 $('#status_id').val("");
+//                 $("#validity_id").val("");
+//                 $("#priority_id").val("");
+//                 $("#details").val("");
+//                 issues_list();
+//             }  
+//         });
+//         return false;
+//     });
 
     $(document).on('click', 'button[type=submit], input[type=submit]', function(){
+        
         clickedButton   =   $(this);
     });
 
@@ -158,7 +187,7 @@ $(document).ready(function(){
         $('#sidebar').toggleClass('active');
     });
 
-
+//for login toggle password
     $("body").on('click', '.toggle-password', function() {
         $(this).toggleClass("fa-eye fa-eye-slash");
         var input = $("#txt_password");
@@ -179,7 +208,7 @@ $(document).ready(function(){
     //     });
     // }
 
-
+//for type of support dropdown
     $(document).on('change', 'select[name="typeofsupport"]', function(){
         var value   =   $(this).val();
         var _this   =   $(this);
@@ -234,8 +263,9 @@ $(document).ready(function(){
             paging      :   true,
             language    : {
                 zeroRecords     : "No record",
-                processing      : "Fetching data..."
+                processing      : "Searching record..."
             },
+
             processing  :   true,
             serverSide  :   true,
             ajax        :   {
@@ -246,7 +276,6 @@ $(document).ready(function(){
         });
     }
 
-    
-    
+
 
 });

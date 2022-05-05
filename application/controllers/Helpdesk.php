@@ -8,7 +8,7 @@ class Helpdesk extends MY_Controller {
         parent::__construct();
 
         $this->requiredLoggedIn();
-        $this->load->model('Ticket_creation_model');
+        // $this->load->model('Ticket_creation_model');
     }
 
 	public function index()
@@ -20,7 +20,7 @@ class Helpdesk extends MY_Controller {
         $data   =   [
             'content'   => 'content/helpdesk/home',
             'title'     =>  'IT Helpdesk' 
-            //'create_id' =>  $all_tickets 
+            
         ];
     
         $this->load->view('template', $data);
@@ -28,11 +28,13 @@ class Helpdesk extends MY_Controller {
     #this function is to load the request a ticket page
     public function request_a_ticket()
     {
+
         $this->load->model('Type_of_support_model');        #load Type_of_support_model 
         $this->load->model('Remarks_model');                #load Remarks_model 
         $this->load->model('Status_model');                 #load Status_model 
         $this->load->model('Priority_model');               #load Priority_model 
         $this->load->model('Validity_model');               #load Validity_model 
+
 
         $support_types   =   $this->Type_of_support_model->list_all_reader(null, null, null, 'type_id ASC');
         $remarks         =   $this->Remarks_model->list_all_reader(null, null, null, 'remark_id ASC');
@@ -283,9 +285,21 @@ class Helpdesk extends MY_Controller {
 
         public function update($create_id)
         {
-       
+             if ($this->input->is_ajax_request()) {
+            $validation  =   validation([
+                ['typeofsupport', '<strong>Type of Support</strong>', 'required|trim', '#typeofsupport'],
+                ['issue_name_type', '<strong>Issue Type</strong>', 'required|trim', '#issue_name_type'],
+                ['status', '<strong>Status</strong>', 'required|trim', '#status'],
+                ['priority', '<strong>Priority</strong>', 'required|trim', '#priority'],
+                ['details', '<strong>Details</strong>', 'required|trim', '#details']
+            ]);
+
+            if ($validation) {
+                $this->response(false, $validation);
+            }
+        
         //  $row            =   $this->Ticket_creation_model->get_reader(['create_id' => $create_id]);
-             $typeofsupport      =   $this->input->post('typeofsupport', true);
+            $typeofsupport      =  $this->input->post('typeofsupport', true);
             $typeofsupport      =   $this->input->post('typeofsupport', true);
             $issue_name_type    =   $this->input->post('issue_name_type', true);
             $remark             =   $this->input->post('remark', true);
@@ -318,19 +332,57 @@ class Helpdesk extends MY_Controller {
            if ($update_row) {
 
                 $this->response(true, 'Updated Successfully', ['action' => 'redirect', 'url' => base_url('helpdesk/issues_list'), 'slow' => true]);
-            } else {
+            } else {    
                 $this->response(false, 'Please try again.');
 
             }
            
         }
 
-
+}
 
         // public function update($create_id)
         // {
 
         //     echo $create_id;
-        // }
+        // } 
 
-}
+    public function users_list()
+    {
+
+        $this->load->model('Users_master_model');
+
+        $records   =   $this->Users_master_model->list_all_reader(null, null, null, 'user_id ASC');
+           
+
+        $data   =   [
+            'content'   => 'content/helpdesk/users',
+            'title'     =>  'IT Helpdesk - User List' ,
+           'records' =>  $records
+           
+             
+                    ];
+    
+        $this->load->view('template', $data);
+
+    }
+
+
+    public function add_new_user()
+    {
+         $this->load->model('User_role_model');               #load User Role Model
+        $user_type   =   $this->User_role_model->list_all_reader(null, null, null, 'role_id ASC');
+
+        $data =[
+
+            'content'   => 'content/helpdesk/add-new-user',
+            'title'     =>  'IT Helpdesk - User List' ,
+            'user_type' =>  $user_type
+        ];
+         $this->load->view('template', $data);
+
+    }
+
+
+
+}  
