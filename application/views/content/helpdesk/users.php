@@ -22,36 +22,33 @@ echo "<pre>";
 
 
     <div class="pt-5">
-        <table class="table table-bordered" id="user-list">
+        <table class="table table-bordered" id="userlist">
 
             <thead>
                 
                 <tr>  
-                    <th>Full Name</th>
+                    <th>Full name</th>
+                
                     <th>User Type</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Active</th>
+                   <!--  <th>Password</th> -->
                 <!--    <th>Action</th> -->
                 </tr> 
             </thead>
             <tbody>
-<?php foreach($records as $row){?>
+<!-- < ?php foreach($records as $row){?>
 <tr>
 
-<td><?php echo $row->firstname;?> <?php echo $row->lastname;?></td>
-<td><?php echo $row->user_role;?></td>
-<td><?php echo $row->username;?></td>
-<td><?php echo $row->email;?></td>
-<td><?php echo $row->active;?></td>
+<td>< ?php echo $row->firstname;?> < ?php echo $row->lastname;?> </td>
 
-<!-- <td>
+<td>< ?php echo $row->user_type;?></td>
+<td>< ?php echo $row->username;?></td>
+<td>< ?php echo $row->email;?></td>
 
-<button class="btn btn-warning" onclick="">Edit</button>
-<button class="btn btn-danger" onclick="">Delete</button>
-</td> -->
+
 </tr>
-<?php }?>
+< ?php }?> -->
             </tbody>
         </table>
     </div>

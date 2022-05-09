@@ -8,14 +8,12 @@ class Helpdesk extends MY_Controller {
         parent::__construct();
 
         $this->requiredLoggedIn();
-        // $this->load->model('Ticket_creation_model');
+       
     }
 
 	public function index()
 	{
-        //$this->load->model('Ticket_creation_model');  
-
-        //$all_tickets   =   $this->Ticket_creation_model->list_all_reader(null, null, null, 'create_id ASC');
+        
 
         $data   =   [
             'content'   => 'content/helpdesk/home',
@@ -312,8 +310,7 @@ class Helpdesk extends MY_Controller {
               
          $update    =   [
                
-                // 'ticket_role'       =>  $ticket_role,
-                // 'ticket_id'         =>  $ticket_id,
+               
                 'type_id'           =>  $typeofsupport,
                 'issue_id'          =>  $issue_name_type,
                 'remark_id'         =>  $remark,
@@ -349,16 +346,73 @@ class Helpdesk extends MY_Controller {
 
     public function users_list()
     {
+        // if ($this->input->is_ajax_request()) {
+        //     $draw   =   $this->input->get('draw', true);
+        //     $limit  =   $this->input->get('length', true) ?? null;
+        //     $offset =   $this->input->get('start', true) ?? null;
+        //     $search =   $this->input->get('search[value]', true) ?? null;
 
-        $this->load->model('Users_master_model');
+        //     $object     =   [
+        //         'draw'            => $draw,
+        //         'recordsTotal'    => 0,
+        //         'recordsFiltered' => 0,
+        //         'data'            => []
+        //     ];
 
-        $records   =   $this->Users_master_model->list_all_reader(null, null, null, 'user_id ASC');
+        //     $this->load->model('Users_master_model');
+
+        //    $records   =   $this->Users_master_model->list_all_reader(null, null, null, 'user_id ASC');
+
+        //     $params     =   [
+        //         'like'   => [
+        //             ['CONCAT(emp_prefix, "-", emp_no)', $search]
+        //         ]
+        //     ];
+
+        //     if (empty($search)) {
+        //         unset($params['like']);
+        //     }
+
+        //     $results            =   $this->Users_master_model->list_all_reader(null, $limit, $offset, 'emp_no.user_type_id DESC', $join, $params);
+
+
+        //     $params['return_count']     =   true;
+        //     $object['recordsFiltered']  =   $this->Users_master_model->list_all_reader(null, $limit, $offset, 'emp_no.user_type_id DESC', $join, $params);
+
+        //     if (isset($params['like'])) {
+        //         unset($params['like']);
+        //     }
+
+        //     $object['recordsTotal']     =   $this->Users_master_model->list_all_reader(null, $limit, $offset, 'users_master.user_id DESC', $join, $params);
+
+        //     if ($results) {
+        //         foreach ($results as $x) {
+        //             array_push($object['data'], [
+        //                 '<a class="link" href="' . base_url('helpdesk/view_userprofile/' . $x->user_id) . '" data-id="' . $x->user_id . '">' . $x->emp_prefix . '-' . $x->emp_no . '</a>',
+        //                 $x->user_type,
+        //                 $x->username,
+        //                 $x->email,
+        //                 ''
+
+        //             ]);
+
+        //         }
+        //     }
+           
+        //     echo json_encode($object);
+        //     exit();
+
+        // }
+
+       // $this->load->model('Users_master_model');
+
+        //$records   =   $this->Users_master_model->list_all_reader(null, null, null, 'user_id ASC');
            
 
         $data   =   [
             'content'   => 'content/helpdesk/users',
-            'title'     =>  'IT Helpdesk - User List' ,
-           'records' =>  $records
+            'title'     =>  'IT Helpdesk - User List',
+            //'records'   =>  $records
            
              
                     ];
@@ -371,7 +425,7 @@ class Helpdesk extends MY_Controller {
     public function add_new_user()
     {
          $this->load->model('User_role_model');               #load User Role Model
-        $user_type   =   $this->User_role_model->list_all_reader(null, null, null, 'role_id ASC');
+         $user_type   =   $this->User_role_model->list_all_reader(null, null, null, 'role_id ASC');
 
         $data =[
 
@@ -384,5 +438,88 @@ class Helpdesk extends MY_Controller {
     }
 
 
+
+    public function create_user()
+    {
+
+         if ($this->input->is_ajax_request()) {
+            $validation  =   validation([
+                ['firstname', '<strong>First Name</strong>', 'required|trim', '#firstname'],
+                ['lastname', '<strong>Last Name</strong>', 'required|trim', '#lastname'],
+                ['email', '<strong>Email</strong>', 'required|trim', '#email'],
+                ['username', '<strong>Username</strong>', 'required|trim', '#username'],
+                ['password', '<strong>password</strong>', 'required|trim', '#password'],
+                ['user_type', '<strong>User type</strong>', 'required|trim', '#user_type']
+            ]);
+
+            if ($validation) {
+                $this->response(false, $validation);
+            }
+
+           $firstname            =   $this->input->post('firstname', true);
+            $lastname             =   $this->input->post('lastname', true);
+            $email                =   $this->input->post('email', true);
+            $username             =   $this->input->post('username', true);
+            $password             =   $this->input->post('password', true);
+            $user_type            =   $this->input->post('user_type', true);
+            $hashed_password      = password_hash($password, PASSWORD_DEFAULT);
+          
+
+            //load the Ticket_creation_model
+            $this->load->model('Users_master_model');
+
+            $emp_prefix        =   'EMP';
+
+            $where      =   [
+                'emp_prefix'   =>  $emp_prefix
+            ];
+
+            $params     =   [
+                'select'    =>      'LPAD(MAX(emp_no), 5, 0) as max_emp_no'
+            ];
+
+            $max_emp_no  =   $this->Users_master_model->get_reader($where, null, null, $params);
+            $tmp_max_emp_no  =   '';
+
+
+            if ($max_emp_no) {
+                if (!empty($max_emp_no->max_emp_no)) {
+                    $tmp_max_emp_no  =   $max_emp_no->max_emp_no;
+                }
+            }
+
+            if (empty($tmp_max_emp_no)) {
+                $tmp_max_emp_no  =   '00001';
+            } else {
+                $tmp_max_emp_no  +=  1;
+
+                $tmp_max_emp_no  =   str_pad($tmp_max_emp_no,  5, "0", STR_PAD_LEFT);
+            }
+
+            $insert     =   [
+                'emp_prefix'        =>  $emp_prefix,
+                'emp_no'            =>  $tmp_max_emp_no,
+                'firstname'         =>  $firstname,
+                'lastname'          =>  $lastname,
+                'username'          =>  $username,
+                'email'             =>  $email,    
+                'password'          =>  $hashed_password,
+                'user_type'         =>  $user_type
+                
+                ];
+                   
+            $insert_row     =   $this->Users_master_model->create($insert);
+                 // print_r($insert); exit();
+            
+        
+            if ($insert_row) {
+
+                $this->response(true, 'Employe ID '. $insert_row->emp_no .' is created.',['action' => 'redirect', 'url' => base_url('helpdesk/users_list'), 'slow' => true]);
+            } else {
+                $this->response(false, 'Please try again.');
+
+            }
+        }
+    }
 
 }  

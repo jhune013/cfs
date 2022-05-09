@@ -5,7 +5,7 @@
 
     <ul class="list-unstyled components">
         <h5><p>Hello, <?php echo $this->session->userdata('firstname'); ?> </p></h5>
-        <p>Access Level: <?php echo $this->session->userdata('user_role'); ?></p>
+        <p>Access Level: <?php echo $this->session->userdata('user_type'); ?></p>
         <li class="active">
              <a href="<?php echo base_url('helpdesk'); ?>">IT Helpdesk</a>
            

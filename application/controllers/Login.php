@@ -43,7 +43,7 @@ class Login extends MY_Controller {
                         'user_id'       =>  $result->user_id,
                         'user_session'  =>  $result,
                         'firstname'     => $result->firstname,
-                        'user_role'     => $result->user_role
+                        'user_type'     => $result->user_type
                     ];
                     $this->session->set_userdata($session);
 

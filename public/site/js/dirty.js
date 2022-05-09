@@ -239,6 +239,7 @@ $(document).ready(function(){
     if ($('.summernote').length >= 1) {
         $('.summernote').summernote({
          height: 300,
+         placeholder: 'Type here...',
          toolbar: [
     // [groupName, [list of button]]
     ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -247,6 +248,7 @@ $(document).ready(function(){
     ['color', ['color']],
     ['para', ['ul', 'ol', 'paragraph']],
     ['height', ['height']],
+     ['picture', ['picture']],
     ['table']
   ]
      });
@@ -275,6 +277,38 @@ $(document).ready(function(){
             }
         });
     }
+
+
+
+
+
+
+
+    // if ($('#userlist').length == 1) {
+    //     var userlist    =   $('#userlist').DataTable( {
+    //         lengthMenu  :   [[25, 50, 100, 200, 500], [25, 50, 100, 200, 500]],
+    //         // sDom        :   'l<"datatable_fixed_height"t>ip',
+    //         ordering    :   false,
+    //         searching   :   true,
+    //         bFilter     :   false,
+    //         paging      :   true,
+    //         language    : {
+    //             zeroRecords     : "No record",
+    //             processing      : "Searching record..."
+    //         },
+
+    //         processing  :   true,
+    //         serverSide  :   true,
+    //         ajax        :   {
+    //             url         :   base_url + "/helpdesk/users_list",
+    //             data        :   function ( d ) {
+    //             }
+    //         }
+    //     });
+    // }
+
+
+
 
 
 
