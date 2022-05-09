@@ -23,6 +23,7 @@ class Helpdesk extends MY_Controller {
     
         $this->load->view('template', $data);
 	}
+
     #this function is to load the request a ticket page
     public function request_a_ticket()
     {
@@ -52,6 +53,7 @@ class Helpdesk extends MY_Controller {
          #load the template
         $this->load->view('template', $data);
     }
+
     #this function is to save our ticket to database
     public function create_your_ticket()
     {
@@ -117,12 +119,18 @@ class Helpdesk extends MY_Controller {
                 'status_id'         =>  $status,
                 'validity_id'       =>  $validity,
                 'priority_id'       =>  $priority,
-                'details'           =>  $details,
                 'employee_name'     =>  $this->user->firstname . ' ' . $this->user->lastname
             ];
             $insert_row     =   $this->Ticket_creation_model->create($insert);
 
             if ($insert_row) {
+                $this->load->model('Ticket_details_model');
+
+                $this->Ticket_details_model->create([
+                    'td_create_id'  =>  $insert_row->create_id,
+                    'td_message'    =>  $details,
+                    'td_user_id'    =>  $this->user->user_id
+                ]);
 
                 $this->response(true, 'Ticket ID #' . $insert_row->ticket_id . ' is created.',['action' => 'redirect', 'url' => base_url('helpdesk/issues_list'), 'slow' => true]);
             } else {
@@ -131,7 +139,7 @@ class Helpdesk extends MY_Controller {
             }
         }
     }
-        #load the ticket list in  table list
+    #load the ticket list in  table list
     public function issues_list()
     {
         if ($this->input->is_ajax_request()) {
@@ -217,40 +225,72 @@ class Helpdesk extends MY_Controller {
         $this->load->model('Priority_model');                #load Priority_model 
         $this->load->model('Validity_model');                #load Validity_model 
         $this->load->model('Ticket_creation_model');         #load Ticket_creation_model 
-        $this->load->model('Issue_type_model');               #load Issue_type_model       
+        $this->load->model('Issue_type_model');               #load Issue_type_model     
+        $this->load->model('Ticket_details_model');  
 
-        $support_types   =   $this->Type_of_support_model->list_all_reader(null, null, null, 'type_id ASC');
-        $remarks         =   $this->Remarks_model->list_all_reader(null, null, null, 'remark_id ASC');
-        $status          =   $this->Status_model->list_all_reader(null, null, null, 'status_id ASC');
-        $priority        =   $this->Priority_model->list_all_reader(null, null, null, 'id ASC');
-        $validity        =   $this->Validity_model->list_all_reader(null, null, null, 'Validity_id ASC');
+        $support_types  =   $this->Type_of_support_model->list_all_reader(null, null, null, 'type_id ASC');
+        $remarks        =   $this->Remarks_model->list_all_reader(null, null, null, 'remark_id ASC');
+        $status         =   $this->Status_model->list_all_reader(null, null, null, 'status_id ASC');
+        $priority       =   $this->Priority_model->list_all_reader(null, null, null, 'id ASC');
+        $validity       =   $this->Validity_model->list_all_reader(null, null, null, 'Validity_id ASC');
 
-        $row            =   $this->Ticket_creation_model->get_reader(['create_id' => $create_id]);
+        $join           =   [
+            ['priority', 'priority.id = ticket_creation.priority_id']
+        ];
+
+        $row            =   $this->Ticket_creation_model->get_reader(['create_id' => $create_id], null, $join);
 
         $issue_types    =   false;
+        $details        =   false;
 
         if ($row) {
             $issue_types    =   $this->Issue_type_model->list_all_reader(['type_id' => $row->type_id]);
+            $join           =   [
+                ['users_master', 'users_master.user_id = ticket_details.td_user_id']
+            ];
+            $details        =   $this->Ticket_details_model->list_all_reader(['td_create_id' => $create_id], null, null, null, $join);
+
+            $time_to_respond    =   false;
+            # Statement for showing the response
+
+            $tmp_message        =   $this->Ticket_details_model->get_reader(['td_create_id' => $create_id], null, null, ['return_count' => true]);
+            if ($tmp_message <= 1) {
+                $need_to_respond    =   strtotime($row->opening_date . ' + ' . $row->p_time_to_respond);
+
+                if (strtotime(time_today()) >= $need_to_respond) {
+                    $time_to_respond =  true;
+                }
+            }
+
+            $time_to_resolve    =   false;
+            if ($row->status_id != 4) {
+                $need_to_resolve    =   strtotime($row->opening_date . ' + ' . $row->p_time_to_resolve);
+
+                if (strtotime(time_today()) >= $need_to_resolve) {
+                    $time_to_resolve =  true;
+                }
+            }
         }
 
+
         $data   =   [
-            'content'       =>  'content/helpdesk/request-a-ticket',
-            'title'         =>  'IT Helpdesk - Edit a ticket',
-            'support_types' =>  $support_types,
-            'remarks'       =>  $remarks,
-            'status'        =>  $status,   
-            'priority'      =>  $priority,
-            'validity'      =>  $validity,
-            'issue_types'   =>  $issue_types,
-            'row'           =>  $row,
-            'viewing'       =>  true
+            'content'           =>  'content/helpdesk/request-a-ticket',
+            'title'             =>  'IT Helpdesk - Edit a ticket',
+            'support_types'     =>  $support_types,
+            'remarks'           =>  $remarks,
+            'status'            =>  $status,   
+            'priority'          =>  $priority,
+            'validity'          =>  $validity,
+            'issue_types'       =>  $issue_types,
+            'row'               =>  $row,
+            'details'           =>  $details,
+            'time_to_respond'   =>  $time_to_respond,
+            'time_to_resolve'   =>  $time_to_resolve,
+            'viewing'           =>  true
         ];
     
         $this->load->view('template', $data);
     }
-
-
-
 
     #load the dynamic dropdown
     public function request_issue_types()
@@ -279,23 +319,20 @@ class Helpdesk extends MY_Controller {
         }
     }
 
-
-
-        public function update($create_id)
-        {
-             if ($this->input->is_ajax_request()) {
+    public function update($create_id)
+    {
+        if ($this->input->is_ajax_request()) {
             $validation  =   validation([
                 ['typeofsupport', '<strong>Type of Support</strong>', 'required|trim', '#typeofsupport'],
                 ['issue_name_type', '<strong>Issue Type</strong>', 'required|trim', '#issue_name_type'],
                 ['status', '<strong>Status</strong>', 'required|trim', '#status'],
-                ['priority', '<strong>Priority</strong>', 'required|trim', '#priority'],
-                ['details', '<strong>Details</strong>', 'required|trim', '#details']
+                ['priority', '<strong>Priority</strong>', 'required|trim', '#priority']
             ]);
 
             if ($validation) {
                 $this->response(false, $validation);
             }
-        
+    
         //  $row            =   $this->Ticket_creation_model->get_reader(['create_id' => $create_id]);
             $typeofsupport      =  $this->input->post('typeofsupport', true);
             $typeofsupport      =   $this->input->post('typeofsupport', true);
@@ -306,43 +343,50 @@ class Helpdesk extends MY_Controller {
             $priority           =   $this->input->post('priority', true);
             $details            =   $this->input->post('details', true);
 
-             $this->load->model('Ticket_creation_model');
-              
-         $update    =   [
-               
-               
+            $this->load->model('Ticket_creation_model');
+            $this->load->model('Ticket_details_model');
+
+            $update    =   [
                 'type_id'           =>  $typeofsupport,
                 'issue_id'          =>  $issue_name_type,
                 'remark_id'         =>  $remark,
                 'status_id'         =>  $status,
                 'validity_id'       =>  $validity,
-                'priority_id'       =>  $priority,
-                'details'           =>  $details
-                
+                'priority_id'       =>  $priority
             ];
+        
+            $update_row     =   $this->Ticket_creation_model->update($update, ['create_id' => $create_id]);
 
-            // print_r($update);
-            
-
-           $update_row     =   $this->Ticket_creation_model->update($update, ['create_id' => $create_id]);
-
-           if ($update_row) {
-
-                $this->response(true, 'Updated Successfully', ['action' => 'redirect', 'url' => base_url('helpdesk/issues_list'), 'slow' => true]);
-            } else {    
-                $this->response(false, 'Please try again.');
-
+            if (!empty($details)) {
+                $this->Ticket_details_model->create([
+                    'td_create_id'  =>  $create_id,
+                    'td_message'    =>  $details,
+                    'td_user_id'    =>  $this->user->user_id
+                ]);
             }
-           
+
+            $this->response(true, 'Updated Successfully', ['action' => 'redirect', 'url' => base_url('helpdesk/view_ticket/' . $create_id), 'slow' => true]);
         }
+    }
 
-}
-
-        // public function update($create_id)
-        // {
-
-        //     echo $create_id;
-        // } 
+    public function upload_image()
+    {
+        if ($this->input->is_ajax_request()) {
+            if ($_FILES['file']['name']) {
+                if (!$_FILES['file']['error']) {
+                   $name        =   md5(rand(100, 200));
+                   $ext         =   explode('.', $_FILES['file']['name']);
+                   $filename    =   $name . '.' . $ext[1];
+                   $destination =   'public/img/uploads/' . $filename; //change this directory
+                   $location    =   $_FILES["file"]["tmp_name"];
+                   move_uploaded_file($location, $destination);
+                   echo base_url($destination);
+                } else {
+                    echo  $message = 'Ooops!  Your upload triggered the following error:  '.$_FILES['file']['error'];
+                }
+            }
+        }
+    }
 
     public function users_list()
     {

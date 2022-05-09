@@ -42,8 +42,8 @@ class Login extends MY_Controller {
                     $session    =   [
                         'user_id'       =>  $result->user_id,
                         'user_session'  =>  $result,
-                        'firstname'     => $result->firstname,
-                        'user_type'     => $result->user_type
+                        'firstname'     =>  $result->firstname,
+                        'user_type'     =>  $result->user_type
                     ];
                     $this->session->set_userdata($session);
 
@@ -54,6 +54,12 @@ class Login extends MY_Controller {
             }
 
             $this->response(false, 'Incorrect Username or Password');
+        }
+
+        if (isset($this->session->user_session)) {
+            if (isset($this->session->user_session->user_id)) {
+                redirect('helpdesk');
+            }
         }
 
         $data   =   [

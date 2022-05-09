@@ -19,15 +19,10 @@ class MY_Controller extends CI_Controller {
     public function requiredLoggedIn()
     {
         if (isset($this->session->user_session)) {
-
-            if (isset($this->session->user_session->USERS_NO)) {
-
-                $this->makeSession();
-
+            if (isset($this->session->user_session->user_id)) {
                 if (empty($this->user)) {
                     redirect(base_url('login'));
                 }
-
             }
         } else {
             redirect(base_url('login'));

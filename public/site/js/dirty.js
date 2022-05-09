@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var clickedButton   =   '';
-    var base_url = window.location.origin + "/cfs";
+    var base_url        = window.location.origin + "";
 
     function empty(value) {
         return ( $.trim( value ) == '' );
@@ -238,21 +238,43 @@ $(document).ready(function(){
 
     if ($('.summernote').length >= 1) {
         $('.summernote').summernote({
-         height: 300,
-         placeholder: 'Type here...',
-         toolbar: [
-    // [groupName, [list of button]]
-    ['style', ['bold', 'italic', 'underline', 'clear']],
-    ['font', ['strikethrough', 'superscript', 'subscript']],
-    ['fontsize', ['fontsize']],
-    ['color', ['color']],
-    ['para', ['ul', 'ol', 'paragraph']],
-    ['height', ['height']],
-     ['picture', ['picture']],
-    ['table']
-  ]
-     });
+            height: 300,
+            placeholder: 'Type here...',
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                 ['picture', ['picture']],
+                ['table']
+            ],
+            callbacks: {
+                onImageUpload: function(files) {
+                    upload_image(files[0]);
+                }
+            }
+        });
 
+        function upload_image(file) {
+            console.log('test');
+            data = new FormData();
+            data.append("file", file);
+
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: base_url + "/helpdesk/upload_image",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(url) {
+                    var image = $('<img>').attr('src', url);
+                    $('#details').summernote("insertNode", image[0]);
+                }
+            });
+          }
     }
 
     if ($('#issue_list_tbl').length == 1) {
