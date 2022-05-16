@@ -27,8 +27,8 @@ echo "<pre>";
             <thead>
                 
                 <tr>  
-                    <th>Full name</th>
-                
+                    <th>Employee ID</th>
+                     <th>Full Name</th>  
                     <th>User Type</th>
                     <th>Username</th>
                     <th>Email</th>

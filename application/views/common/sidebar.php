@@ -11,7 +11,7 @@
            
         </li>
         <li>
-            <a href="#">HR Helpdesk</a>
+            <a href="<?php echo base_url('helpdesk/hr_helpdesk'); ?>">HR Helpdesk</a>
         </li>
         <li>
             <a href="#">Admin Helpdesk</a>

@@ -1,6 +1,6 @@
 $(document).ready(function(){
     var clickedButton   =   '';
-    var base_url        = window.location.origin + "";
+    var base_url        = window.location.origin + "/cfs";
 
     function empty(value) {
         return ( $.trim( value ) == '' );
@@ -200,6 +200,8 @@ $(document).ready(function(){
     });
 
 
+
+
     // if ($('#table-id').length == 1) {
     //     $('#table-id').DataTable({
     //         "order": [[ 1, "asc" ]],
@@ -225,6 +227,7 @@ $(document).ready(function(){
             success: function (result) {
                 if (!empty(result)) {
                     $('select[name="issue_name_type"]').html(result.issue_type_html);
+                    $('select[name="priority"]').html(result.priority_html);
                 }
 
 
@@ -240,16 +243,20 @@ $(document).ready(function(){
         $('.summernote').summernote({
             height: 300,
             placeholder: 'Type here...',
+            
             toolbar: [
-                ['style', ['bold', 'italic', 'underline', 'clear']],
-                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['style', ['bold', 'italic', 'underline']],
+                ['font', ['strikethrough']],
                 ['fontsize', ['fontsize']],
+                ['fontname', ['fontname']],
                 ['color', ['color']],
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['height', ['height']],
-                 ['picture', ['picture']],
-                ['table']
+                ['picture', ['picture']],
+                // ['insert', ['link', 'picture', 'video', 'file']],
+                ['table', ['table']],
             ],
+
             callbacks: {
                 onImageUpload: function(files) {
                     upload_image(files[0]);
@@ -306,31 +313,36 @@ $(document).ready(function(){
 
 
 
-    // if ($('#userlist').length == 1) {
-    //     var userlist    =   $('#userlist').DataTable( {
-    //         lengthMenu  :   [[25, 50, 100, 200, 500], [25, 50, 100, 200, 500]],
-    //         // sDom        :   'l<"datatable_fixed_height"t>ip',
-    //         ordering    :   false,
-    //         searching   :   true,
-    //         bFilter     :   false,
-    //         paging      :   true,
-    //         language    : {
-    //             zeroRecords     : "No record",
-    //             processing      : "Searching record..."
-    //         },
+    if ($('#userlist').length == 1) {
+        var userlist    =   $('#userlist').DataTable( {
+            lengthMenu  :   [[25, 50, 100, 200, 500], [25, 50, 100, 200, 500]],
+            // sDom        :   'l<"datatable_fixed_height"t>ip',
+            ordering    :   false,
+            searching   :   true,
+            bFilter     :   false,
+            paging      :   true,
+            language    : {
+                zeroRecords     : "No record",
+                processing      : "Searching record..."
+            },
 
-    //         processing  :   true,
-    //         serverSide  :   true,
-    //         ajax        :   {
-    //             url         :   base_url + "/helpdesk/users_list",
-    //             data        :   function ( d ) {
-    //             }
-    //         }
-    //     });
-    // }
+            processing  :   true,
+            serverSide  :   true,
+            ajax        :   {
+                url         :   base_url + "/helpdesk/users_list",
+                data        :   function ( d ) {
+                }
+            }
+        });
+    }
 
 
 
+    $(document).on('click', '.details-box img', function(){
+        var _this   =   $(this);
+        var src     =   _this.attr('src');
+        console.log(src);
+    });
 
 
 

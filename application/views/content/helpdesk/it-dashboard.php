@@ -1,4 +1,3 @@
-
 <div class="container p-4">    
      <main class="container-fluid">
   <h5>IT Helpdesk</h5>
@@ -9,9 +8,10 @@
                                 <div class="card mb-3 widget-content">
                                     <div class="widget-content-wrapper ">
                                         <div class="widget-content-left">
-                                            <a href="helpdesk/request_a_ticket" class="d-flex align-items-center">
+                                          
                                           <span class="bi bi-box h5"></span>
-                                                <h5 class="ml-2">Request a ticket </h5>
+                                                <h5 class="ml-2">Open </h5>
+                                                <h5>&nbsp; (<?php echo $Open; ?>  Open Tickets)</h5>
                                             </a>
                                          
                                         </div>
@@ -23,10 +23,10 @@
                                 <div class="card mb-3 widget-content">
                                     <div class="widget-content-wrapper">
                                         <div class="widget-content-left">
-                                            <a href="helpdesk/issues_list" class="d-flex align-items-center">
+                                          
                                             <span class="bi bi-person h5"></span>
-                                         <h5 class="ml-2">Issue Lists </h5>
-                                            <h5 >&nbsp; (<?php echo $Open; ?>  Open Tickets)</h5>
+                                         <h5 class="ml-2">Replied</h5>
+                                           <h5>&nbsp; (<?php echo $replied; ?> Replied Tickets)</h5>
                
             
                                             </a>
@@ -45,9 +45,10 @@
                                 <div class="card mb-3 widget-content">
                                     <div class="widget-content-wrapper">
                                         <div class="widget-content-left">
-                                            <a href="helpdesk/users_list" class="d-flex align-items-center">
+                                           
                                             <span class="bi bi-person h5"></span>
-                                         <h5 class="ml-2">Users </h5>
+                                         <h5 class="ml-2">Onhold </h5>
+                                         <h5>&nbsp; (<?php echo $onhold; ?> Onhold Tickets)</h5>
                                             </a>
                                             
                                         </div>
@@ -61,9 +62,10 @@
                                 <div class="card mb-3 widget-content">
                                     <div class="widget-content-wrapper">
                                         <div class="widget-content-left">
-                                            <a href="helpdesk/it_dashboard" class="d-flex align-items-center">
+                                          
                                             <span class="bi bi-person h5"></span>
-                                         <h5 class="ml-2"> IT Helpdesk Dashboard </h5>
+                                         <h5 class="ml-2"> Closed </h5>
+                                          <h5>&nbsp; (<?php echo $closed; ?> Closed Tickets)</h5>
                                             </a>
                                             
                                         </div>
@@ -72,7 +74,19 @@
                                 </div>
                             </div>
                       </div>
-                     </div>           
+                     </div>   
+                     <div class="container">
+      <h2>Line Chart</h2>
+      <div>
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>        
 
   </div>
+
+
+
+
 </main>
+
+

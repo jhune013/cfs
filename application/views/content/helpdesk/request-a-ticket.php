@@ -2,6 +2,7 @@
     $tab_1          =   ($viewing ? 'View your Ticket' : 'Create your Ticket');
     $action         =   ($viewing ? base_url('helpdesk/update/'.$row->create_id): base_url('helpdesk/create_your_ticket'));
     $btn_edt        =   ($viewing ? 'Update' : 'SUBMIT');
+
      $txt_details   =   '';
 
     if (isset($row)) {
@@ -10,6 +11,11 @@
         }
     }
 ?>
+
+
+
+
+
 
 <div class="container p-4">
  
@@ -31,13 +37,34 @@
                 <div class="container pt-4">
                     
                     <?php if ($viewing): ?>
-                        <?php if ($time_to_respond && $time_to_resolve): ?>
-                            <div>PUT NOTIFICATION - TIME TO RESPOND & RESOLVE FAILED</div>
-                        <?php elseif ($time_to_respond): ?>
-                            <div>PUT NOTIFICATION - TIME TO RESPOND FAILED</div>
-                        <?php elseif ($time_to_resolve): ?>
-                            <div>PUT NOTIFICATION - TIME TO RESOLVE FAILED</div>
-                        <?php endif; ?>
+                      
+                    <?php if($time_to_respond && $time_to_resolve ): ?>
+                            <div class="alert alert-danger" role="alert">
+                          &#x2022; <strong>Service level Agreement Failed</strong>  
+                            </div>        
+                    <?php elseif  ($time_to_respond): ?>
+
+                            <div class="alert alert-danger" role="alert">
+                               &#x2022; <strong>Time to Respond Failed</strong>
+                            </div>
+                         
+                    <?php elseif ($time_to_resolve): ?>
+                            <div class="alert alert-danger" role="alert">
+                          &#x2022; <strong>Time to Resolve Failed</strong>  
+                            </div>
+                          <?php endif; ?>  
+
+                    <?php if ($on_hold): ?>
+                            <div class="alert alert-info" role="alert">
+                          &#x2022; <strong>SLA Onhold</strong>  
+                            </div>
+
+                          <?php endif; ?>    
+                     
+                    
+
+                      
+                   
                     <?php endif; ?>
 
                     <!-- <form class="form" id="editForm" action="< ?php echo base_url(); ?>helpdesk/update/< ?php echo $row->create_id; ?>" method="post"> -->
@@ -48,6 +75,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="row">
+                                         
                                     <div class="col-md-12">
                                         <div class="form-group form-parent">
                                             <span class="required">*</span>
@@ -65,13 +93,17 @@
                                                                     $selected  =   'selected';
                                                                 }
                                                             }
+
                                                         ?>
+
+
                                                         <option value="<?php echo $x->type_id; ?>" <?php echo $selected; ?>><?php echo $x->support_type; ?></option>
                                                     <?php endforeach; ?>
                                                 <?php endif; ?>
                                             </select>
                                         </div>
                                     </div>
+                                      
                                     <div class="col-md-12">
                                         <div class="form-group form-parent">
                                             <span class="required">*</span>
@@ -185,30 +217,65 @@
                                         <?php endif; ?>
                                     </select>
                                 </div>
+
                             </div>
+
+
 
                             <div class="col-md-6">
                                 <div class="form-group form-parent">
                                     <label class="control-label" style="padding-right: 0px;">Priority</label>
                                     <select class="form-control" id="priority" name="priority" required>
                                         <option value="" selected disabled hidden>Select...</option>
-                                        <?php if($priority):?>
-                                            <?php foreach($priority as $x): ?>
-                                                <?php
-                                                    $selected_priority    =   "";
+                                        <?php if (isset($priority_list)): ?>
+                                            <?php if ($priority_list): ?>
+                                                <?php foreach ($priority_list as $x): ?>
 
-                                                    if ($x->id == 1) {
-                                                        $selected_priority    =   'selected';
-                                                    }
-                                                ?>
-                                                <option value="<?php echo $x->id; ?>" <?php echo $selected_priority; ?>><?php echo $x->priority_name; 
-                                                ?></option>
-                                            <?php endforeach; ?>
+                                                    <?php
+                                                        $selected  =   '';
+
+                                                        if (isset($row)) {
+                                                            if ($row->priority_id == $x->id) {
+                                                                $selected  =   'selected';
+                                                            }
+                                                        }
+                                                    ?>
+                                                    <option value="<?php echo $x->id; ?>" <?php echo $selected; ?>><?php echo $x->priority_name; ?></option>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         <?php endif; ?>
                                     </select>
                                 </div>
                             </div>
+                         <?php if ($viewing): ?>
+                              <div class="col-md-6">
+                                <div class="form-group form-parent">
+                                    <label class="control-label" style="padding-right: 0px;">Solved By</label>
+                                    <select class="form-control" id="validity" name="validity">
+                                        <option value="" selected disabled hidden>Select...</option>
+                                        
+                                    </select>
+                                </div>
+
+                            </div>
+                        <?php endif; ?>
+
+
+
+                           <?php if ($viewing): ?>
+                             <div class="col-md-6">
+                                <div class="form-group form-parent">
+                                   
+                                <label class="control-label" style="padding-right: 0px;">Employee</label>
+                                
+                                <input type="firstname" class="form-control" id="firstname" name="firstname" value="" disabled>
+                                
+                                </div>  
+                               </div>
+                        <?php endif; ?>
+
                         </div>
+
                         <hr>
                         <div class="row">
                             <div class="col-md-12">
@@ -218,7 +285,7 @@
                                 <?php if ($details): ?>
                                     <div class="col-md-12">
                                         <?php foreach ($details as $x): ?>
-                                            <div style="background: #F8F9FA;padding: 10px;border-radius: 5px;margin-bottom: 5px;">
+                                            <div class="details-box" id="mymodal" style="background: #F8F9FA;padding: 10px;border-radius: 5px;margin-bottom: 5px;">
                                                 <?php echo $x->td_message;?>
                                                 <div><?php echo $x->firstname . ' ' . $x->lastname . ' - ' . mydate('M d, Y g:i:s.v A', mystrtotime($x->td_created)); ?></div>
                                             </div>
