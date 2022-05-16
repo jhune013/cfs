@@ -3,6 +3,7 @@
     $action         =   ($viewing ? base_url('helpdesk/update/'.$row->create_id): base_url('helpdesk/create_your_ticket'));
     $btn_edt        =   ($viewing ? 'Update' : 'SUBMIT');
 
+
      $txt_details   =   '';
 
     if (isset($row)) {
@@ -10,6 +11,23 @@
             $txt_details    =   $row->details;
         }
     }
+
+    $disabled_closed    =   false;
+
+    if (isset($row)) {
+        if ($row->status_id == 4) {
+        $disabled_closed    =   true;
+         }
+    }
+
+       $disabled_replied    =   false;
+
+    if (isset($row)) {
+        if ($row->status_id == 2) {
+       $disabled_replied    =   true;
+         }
+    }
+    
 ?>
 
 
@@ -37,29 +55,31 @@
                 <div class="container pt-4">
                     
                     <?php if ($viewing): ?>
-                      
-                    <?php if($time_to_respond && $time_to_resolve ): ?>
-                            <div class="alert alert-danger" role="alert">
-                          &#x2022; <strong>Service level Agreement Failed</strong>  
-                            </div>        
-                    <?php elseif  ($time_to_respond): ?>
-
+                        <?php if ($time_to_respond == "FAILED"): ?>
                             <div class="alert alert-danger" role="alert">
                                &#x2022; <strong>Time to Respond Failed</strong>
                             </div>
+                        <?php elseif ($time_to_respond == "SUCCESS"): ?>
+                            <div class="alert alert-success" role="alert">
+                               &#x2022; <strong>Time to Respond Fulfilled</strong>
+                            </div>
+                        <?php endif; ?>
                          
-                    <?php elseif ($time_to_resolve): ?>
+                        <?php if ($time_to_resolve == "FAILED"): ?>
                             <div class="alert alert-danger" role="alert">
-                          &#x2022; <strong>Time to Resolve Failed</strong>  
+                                &#x2022; <strong>Time to Resolve Failed</strong>  
                             </div>
-                          <?php endif; ?>  
+                        <?php elseif ($time_to_resolve == "SUCCESS"): ?>
+                            <div class="alert alert-success" role="alert">
+                               &#x2022; <strong>Time to Resolve Fulfilled</strong>
+                            </div>
+                        <?php endif; ?>
 
-                    <?php if ($on_hold): ?>
+                        <?php if ($on_hold): ?>
                             <div class="alert alert-info" role="alert">
-                          &#x2022; <strong>SLA Onhold</strong>  
+                                &#x2022; <strong>SLA Onhold</strong>  
                             </div>
-
-                          <?php endif; ?>    
+                        <?php endif; ?>    
                      
                     
 
@@ -75,13 +95,13 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="row">
-                                         
+                                  
                                     <div class="col-md-12">
                                         <div class="form-group form-parent">
                                             <span class="required">*</span>
                                             <label class="control-label" style="padding-right: 0px;">Type of support</label>
 
-                                            <select class="form-control" id="typeofsupport" name="typeofsupport">
+                                            <select class="form-control <?php echo ($disabled_closed ? 'form-disabled' : ''); ?> <?php echo ($disabled_replied ? 'form-disabled' : ''); ?>" id="typeofsupport" name="typeofsupport">
                                                 <option value="" selected disabled hidden>Select...</option>
                                                 <?php if ($support_types): ?>
                                                     <?php foreach ($support_types as $x): ?>
@@ -103,13 +123,13 @@
                                             </select>
                                         </div>
                                     </div>
-                                      
+                                        
                                     <div class="col-md-12">
                                         <div class="form-group form-parent">
                                             <span class="required">*</span>
                                             <label class="control-label" style="padding-right: 0px;">Issue Type</label>
 
-                                            <select class="form-control" id="issue_name_type" name="issue_name_type">
+                                            <select class="form-control <?php echo ($disabled_closed ? 'form-disabled' : ''); ?> <?php echo ($disabled_replied ? 'form-disabled' : ''); ?>"  id="issue_name_type" name="issue_name_type">
                                                 <option value="" selected disabled hidden>Select...</option>
 
                                                 <?php if (isset($issue_types)): ?>
@@ -198,7 +218,7 @@
                             <div class="col-md-6">
                                 <div class="form-group form-parent">
                                     <label class="control-label" style="padding-right: 0px;">Validity</label>
-                                    <select class="form-control" id="validity" name="validity">
+                                    <select class="form-control"  id="validity" name="validity">
                                         <option value="" selected disabled hidden>Select...</option>
                                         <?php if($validity):?>
                                             <?php foreach($validity as $x): ?>
@@ -268,7 +288,7 @@
                                    
                                 <label class="control-label" style="padding-right: 0px;">Employee</label>
                                 
-                                <input type="firstname" class="form-control" id="firstname" name="firstname" value="" disabled>
+                                <input type="firstname" class="form-control form-disabled" id="firstname" name="firstname" value="<?php  echo $row->employee_name; ?>">
                                 
                                 </div>  
                                </div>
@@ -295,12 +315,12 @@
                             <?php endif; ?>
                             <div class="col-md-12 pt-4">
                                 <div class="form-group form-parent">
-                                    <textarea class="summernote" name="details" id="details"></textarea> 
+                                    <textarea class="summernote" <?php echo ($disabled_closed ? 'disabled' : ''); ?> name="details" id="details"></textarea> 
                                 </div>
                             </div>
 
                             <div class="col-md-3 offset-md-9 pt-4">
-                                <button type="submit" class="btn btn-primary w-100"><?php echo $btn_edt; ?></button> 
+                                <button type="submit" <?php echo ($disabled_closed ? 'disabled' : ''); ?>  class="btn btn-primary w-100"><?php echo $btn_edt; ?></button> 
                                  </div>
                               <div class="col-md-3 offset-md-9 pt-4">
                                <!--  <button type="submit" class="btn btn-primary w-100">edit</button> 

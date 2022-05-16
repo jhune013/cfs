@@ -244,3 +244,11 @@ a{
 
   
 
+.form-disabled {
+    opacity: .4;
+    cursor: default;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    pointer-events: none;
+}

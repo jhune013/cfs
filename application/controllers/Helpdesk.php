@@ -274,33 +274,59 @@ class Helpdesk extends MY_Controller {
             ];
             $details        =   $this->Ticket_details_model->list_all_reader(['td_create_id' => $create_id], null, null, null, $join);
 
-            $time_to_respond    =   false;
-            $time_to_resolve    =   false;
+            $time_to_respond    =   'PROCESS';
+            $time_to_resolve    =   'PROCESS';
             $on_hold            =   false;
             $replied            =   false;
             $closed             =   false;
             $open               =   false;
-            $failed             =   false;
+            
            
             # Statement for showing the response
 
             if (!in_array($row->status_id, [3])) { 
-                $tmp_message        =   $this->Ticket_details_model->get_reader(['td_create_id' => $create_id], null, null, ['return_count' => true]);
-                if ($tmp_message <= 1) {
-                     $need_to_respond    =   strtotime($row->opening_date . ' + ' . $row->p_time_to_respond);
+                $tmp_message        =   $this->Ticket_details_model->list_all_reader(['td_create_id' => $create_id], null, null);
+
+                if (count($tmp_message) <= 1) {
+                    $need_to_respond    =   strtotime($row->opening_date . ' + ' . $row->p_time_to_respond);
 
                     if (strtotime(time_today()) >= $need_to_respond) {
-                        $time_to_respond =  true;
-                      }
+                        $time_to_respond =  'FAILED';
+                    }
 
-                  }
+                } else if (count($tmp_message) >= 2) {
+                    $need_to_respond    =   strtotime($row->opening_date . ' + ' . $row->p_time_to_respond);
+                    if (strtotime($tmp_message[1]->td_created) >= $need_to_respond) {
+                        $time_to_respond =  'FAILED';
+                    } else {
+                        $time_to_respond    =   'SUCCESS';
+                    }
+                }
 
-                  $time_to_resolve    =   false;
+                $time_to_resolve    =   'PROCESS';
                 if ($row->status_id != 4) {
-                $need_to_resolve    =   strtotime($row->opening_date . ' + ' . $row->p_time_to_resolve);
-                     if (strtotime(time_today()) >= $need_to_resolve) {
-                    $time_to_resolve =  true;
-                   }
+                    $need_to_resolve    =   strtotime($row->opening_date . ' + ' . $row->p_time_to_resolve);
+
+                    if (!empty($row->on_hold_date)) {
+                        $need_to_resolve    =   strtotime($row->on_hold_date . ' + ' . $row->p_time_to_resolve);
+                    }
+
+                    if (strtotime(time_today()) >= $need_to_resolve) {
+                        $time_to_resolve =  'FAILED';
+                    }
+                    
+                } else {
+                    $need_to_resolve    =   strtotime($row->opening_date . ' + ' . $row->p_time_to_resolve);
+                    
+                    if (!empty($row->on_hold_date)) {
+                        $need_to_resolve    =   strtotime($row->on_hold_date . ' + ' . $row->p_time_to_resolve);
+                    }
+                    
+                    if (strtotime($row->resolve_time) >= $need_to_resolve) {
+                        $time_to_resolve =  "FAILED";
+                    } else {
+                        $time_to_resolve = "SUCCESS";
+                    }
                 }
 
                 //  $time_to_resolve    =   false;
@@ -312,9 +338,9 @@ class Helpdesk extends MY_Controller {
                 // }
 
 
-             } else {
-             $onhold     =  true;
-                     }
+            } else {
+                $on_hold     =  true;
+            }
 
 
 
@@ -434,6 +460,12 @@ class Helpdesk extends MY_Controller {
             }
             $update_row     =   $this->Ticket_creation_model->update($update, ['create_id' => $create_id]);
 
+            if ($status == 4) {
+                $update['resolve_time']     =   date('Y-m-d H:i:s');
+            }
+            $update_row     =   $this->Ticket_creation_model->update($update, ['create_id' => $create_id]);
+
+
             if (!empty($details)) {
                 $this->Ticket_details_model->create([
                     'td_create_id'  =>  $create_id,
@@ -551,7 +583,7 @@ class Helpdesk extends MY_Controller {
             ];
 
          $user_type        =   $this->User_role_model->list_all_reader(null, null, null, 'role_id ASC');
-         $firstname        =   $this->Users_master_model->list_all_reader($where);
+         $user              =   $this->Users_master_model->get_reader($where);
          // $lastname         =   $this->Users_master_model->list_all_reader($where);
          // $email            =   $this->Users_master_model->list_all_reader($where);
          // $username         =   $this->Users_master_model->list_all_reader($where);
@@ -564,7 +596,7 @@ class Helpdesk extends MY_Controller {
 
             'content'         => 'content/helpdesk/add-new-user',
             'title'           =>  'IT Helpdesk - User List' ,
-            'firstname'      =>  $firstname,
+            'user'      =>  $user,
             // 'lastname'        =>  $lastname,
             // 'username'        =>  $username,
             // 'email'           =>  $email,    

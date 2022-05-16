@@ -8,6 +8,23 @@
    //          $txt_details    =   $row->details;
    //      }
    //  }
+
+    $firstname      =   "";
+    $lastname       =   "";
+    $email          =   "";
+    $username       =   "";
+    $role_id        =   "";
+
+    if (isset($user)) {
+        if ($user) {
+            $firstname      =   $user->firstname;
+            $lastname       =   $user->lastname;
+            $email          =   $user->email;
+            $username       =   $user->username;
+            $role_id        =   $user->user_type_id;
+        }
+    }
+
 ?>
 
 
@@ -34,24 +51,11 @@
                        
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-12">
-                            	 <div class="form-group form-parent">
-                            	  <span class="required">*</span>
-                            	<label class="control-label" style="padding-right: 0px;">First Name</label>
-                                       <?php if ($firstname): ?>
-                                                    <?php foreach ($firstname as $x): ?>
-                                                        <?php
-                                                         $selected  =   '';
-
-                                                           if (isset($row)) {
-                                                                if ($row->firstname == $x->firstname) {
-                                                                   $selected  =   'selected';
-                                                                }
-                                                            }
-                                                        ?>
-                            	<input type="firstname" class="form-control" id="firstname" name="firstname" value="<?php echo $x->firstname; ?>" <?php echo $selected; ?>>
-                                     <?php endforeach; ?>
-                                                     <?php endif; ?>
-                            </div>
+                            	<div class="form-group form-parent">
+                            	   <span class="required">*</span>
+                            	    <label class="control-label" style="padding-right: 0px;">First Name</label>
+                                    <input type="firstname" class="form-control" id="firstname" name="firstname" value="<?php echo $firstname; ?>">
+                                </div>
 
                              </div>
 
@@ -61,20 +65,7 @@
                                         <div class="form-group form-parent">
                                             <span class="required">*</span>
                                             <label class="control-label" style="padding-right: 0px;">Last Name</label>
-                                          <!--   < ?php if ($lastname): ?> -->
-                                            <!--         < ?php foreach ($lastname as $x): ?>
-                                                        < ?php
-                                                            $selected  =   '';
-
-                                                           if (isset($row)) {
-                                                            //    if ($row->lastname == $x->lastname) {
-                                                                   $selected  =   'selected';
-                                                                }
-                                                            }
-                                                        ?> -->
-                                          <input type="lastname" class="form-control" id="lastname" name="lastname"> <!-- value="< ?php echo $x->lastname; ?>" < ?php echo $selected; ?>>
-                                     < ?php endforeach; ?>
-                                                < ?php endif; ?> -->
+                                          <input type="lastname" class="form-control" id="lastname" name="lastname" value="<?php echo $lastname; ?>">
                                         </div>
                                     </div>
 
@@ -87,20 +78,7 @@
                             <div class="col-md-6">
                                 <div class="form-group form-parent">
                                     <label class="control-label" style="padding-right: 0px;">Email</label>
-                                     <!-- < ?php if ($email): ?>
-                                                    < ?php foreach ($email as $x): ?>
-                                                        < ?php
-                                                            $selected  =   '';
-
-                                                            if (isset($row)) {
-                                                                if ($row->email == $x->email) {
-                                                                    $selected  =   'selected';
-                                                                }
-                                                            }
-                                                        ?> -->
-                                     <input type="email" class="form-control" id="email"  name="email"> <!-- value="< ?php echo $x->email; ?>" < ?php echo $selected; ?>>
-                                     <  ?php endforeach; ?>
-                                                < ?php endif; ?> -->
+                                     <input type="email" class="form-control" id="email"  name="email" value="<?php echo $email; ?>">
                                 </div>
                             </div>
 
@@ -108,20 +86,7 @@
                                 <div class="form-group form-parent">
                                 	  <span class="required">*</span>
                                     <label class="control-label" style="padding-right: 0px;">Username</label>
-                                   <!--  < ?php if ($username): ?>
-                                                    < ?php foreach ($username as $x): ?>
-                                                        < ?php
-                                                            $selected  =   '';
-
-                                                            if (isset($row)) {
-                                                                if ($row->username == $x->username) {
-                                                                    $selected  =   'selected';
-                                                                }
-                                                            }
-                                                        ?> -->
-                                    <input type="username" class="form-control" id="username"  name="username"> <!-- value="< ?php echo $x->username; ?>" < ?php echo $selected; ?>>
-                                    < ?php endforeach; ?>
-                                                < ?php endif; ?> -->
+                                    <input type="username" class="form-control" id="username"  name="username" value="<?php echo $username; ?>"> 
                                 </div>
                             </div>
 
@@ -137,24 +102,11 @@
                               <div class="col-md-6">
                              <div class="form-group form-parent">
                                    <label>Password</label>
-                                   <!-- < ?php if ($password): ?>
-                                                    < ?php foreach ($password as $x): ?>
-                                                        < ?php
-                                                            $selected  =   '';
-
-                                                            if (isset($row)) {
-                                                                if ($row->password == $x->password) {
-                                                                    $selected  =   'selected';
-                                                                }
-                                                            }
-                                                        ?> -->
                         <div class="input-group">
                             <div class="input-group-prepend">
                                
                             </div>
-                         <input type="password" class="form-control" name="txt_password" id="txt_password" placeholder="•••••" value=""><!-- < ?php echo $x->password; ?>" < ?php echo $selected; ?>>
-                                    < ?php endforeach; ?>
-                                                < ?php endif; ?> -->
+                         <input type="password" class="form-control" name="txt_password" id="txt_password" placeholder="•••••" value="">
 
                             <div class="input-group-prepend">
                                 <span class="input-group-text" toggle="#txt_password"><i class="fa fa-fw fa-eye field-icon toggle-password"></i></span>
@@ -175,12 +127,9 @@
                                                     $selected_status    =   "";
 
 
-                                                    if (isset($row)) {
-                                                       
-                                                            if ($row->role_id == $x->user_type_id) {
-                                                                $selected_status  =   'selected';
-                                                            }
-                                                        }
+                                                    if ($role_id == $x->user_type_id) {
+                                                        $selected_status  =   'selected';
+                                                    }
                                                     
                                                 ?>
                                                 

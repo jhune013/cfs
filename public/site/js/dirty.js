@@ -240,9 +240,13 @@ $(document).ready(function(){
     
 
     if ($('.summernote').length >= 1) {
+
+        var summernote_disabled     =   $('.summernote').prop('disabled');
+
         $('.summernote').summernote({
             height: 300,
             placeholder: 'Type here...',
+
             
             toolbar: [
                 ['style', ['bold', 'italic', 'underline']],
@@ -263,6 +267,10 @@ $(document).ready(function(){
                 }
             }
         });
+
+        if (summernote_disabled) {
+            $('.summernote').summernote('disable');
+        }
 
         function upload_image(file) {
             console.log('test');
