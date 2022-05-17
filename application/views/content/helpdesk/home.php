@@ -26,7 +26,7 @@
                                             <a href="helpdesk/issues_list" class="d-flex align-items-center">
                                             <span class="bi bi-person h5"></span>
                                          <h5 class="ml-2">Issue Lists </h5>
-                                            <h5 >&nbsp; (<?php echo $Open; ?>  OpenTickets)</h5>
+                                            <h5 >&nbsp; (<?php echo $Open; ?>  Open  Ticketss)</h5>
                
             
                                             </a>
